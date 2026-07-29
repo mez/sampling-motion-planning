@@ -126,23 +126,36 @@ class RRT:
         self.path_distance += self.step_size #this is a rough estimate of the path distance, we can improve this later by calculating the actual distance between nodes
         self.trace_rrt_path(goal_node.parent)
 
+    def _step(self):
+        self.reset_nearest_values()
+        sampled_point = self.sample_a_point()
+        self.find_nearest_node(self.random_tree, sampled_point)
+        steered_point = self.steer_to_point(self.nearest_node.location, sampled_point)
+        if not self.is_point_in_obstacle(self.nearest_node.location, steered_point):
+            parent = self.nearest_node
+            self.add_child(steered_point)
+            child = parent.children[-1]
+            if self.is_goal_reached(steered_point):
+                self.trace_rrt_path(child)
+                return parent, child, True
+            return parent, child, False
+        return None, None, False
+
     def run(self):
         for i in range(self.iterations):
-            self.reset_nearest_values()
             print(f"Iteration {i+1}/{self.iterations}")
+            _, _, goal_reached = self._step()
+            if goal_reached:
+                print("Goal reached!")
+                return self.waypoints
 
-            sampled_point = self.sample_a_point()
-            self.find_nearest_node(self.random_tree, sampled_point)
-
-            # we move from nearest_node towards the sampled_point by a distance of step_size and create a new node at that location
-            steered_point = self.steer_to_point(self.nearest_node.location, sampled_point)
-            if not self.is_point_in_obstacle(self.nearest_node.location, steered_point):
-                self.add_child(steered_point)
-
-                if self.is_goal_reached(steered_point):
-                    print("Goal reached!")
-                    self.trace_rrt_path(self.nearest_node.children[-1])  # trace back from the last added child
-                    return self.waypoints
+    def run_interactive(self, on_step):
+        for _ in range(self.iterations):
+            parent, child, goal_reached = self._step()
+            if child is not None:
+                on_step(parent, child)
+            if goal_reached:
+                return self.waypoints
 
 # # Rapidly-exploring Random Tree March
 # class RRTMarch:
