@@ -7,7 +7,7 @@ class Point(NamedTuple):
 
 class Node:
     def __init__(self, location: Point):
-        # location tells us where the node is in the configuration space
+        # location tells us where the node is in the continuouus space
         self.location = location
         self.parent = None
         self.children = []
