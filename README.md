@@ -2,11 +2,13 @@
 
 Hands-on exploration of sampling-based motion planning algorithms in Python.
 
+![RRT solved](img/rrt_solved.png)
+
 ## Algorithms
 
 | Algorithm | Status |
 |-----------|--------|
-| RRT (Rapidly-exploring Random Tree) | In progress |
+| RRT (Rapidly-exploring Random Tree) | Done |
 | RRT March | Planned |
 | RRT* | Planned |
 | PRM (Probabilistic Road Map) | Planned |
