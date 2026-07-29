@@ -16,5 +16,4 @@ wheels/
 .python-version
 
 # Outputs
-*.png
 *.mp4
