@@ -9,13 +9,22 @@ config_space = np.zeros((100, 100))
 config_space[20:40, 20:40] = 1  # Square obstacle
 config_space[60:80, 60:80] = 1  # Another square
 
-# Function to visualize the configuration space
-def visualize_config_space(config_space):
-    plt.imshow(config_space, cmap='gray', origin='lower')
-    plt.title('Configuration Space')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
-    plt.show()  
 
-visualize_config_space(config_space)
+# lets initialize the RRT class with a start and goal location, number of iterations, configuration space, and step size
+start = (10, 10)
+goal = (90, 90)
+num_iterations = 200
+step_size = 5.0
+goal_region = plt.Circle(goal, step_size, color='g', alpha=0.5)
 
+# view the configuration space with the start and goal locations
+fig = plt.figure("RRT Path Planning")
+plt.imshow(config_space, cmap='binary', origin='lower')
+plt.plot(start[0], start[1], 'ro', label='Start')
+plt.plot(goal[0], goal[1], 'go', label='Goal')
+ax = plt.gca()
+ax.add_patch(goal_region)
+plt.xlabel('X-axis $(m)$')
+plt.ylabel('Y-axis $(m)$')
+plt.legend()
+plt.show()
